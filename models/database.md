@@ -1,0 +1,51 @@
+User:
+    -email
+    -username
+    -password
+    -role
+    -want
+    -playing
+    -played
+
+Game:
+    -id
+    -title
+    -cover
+    -slug
+    -storyline
+    -summary
+    -platforms
+    -publishers
+    -developers
+    -popularity
+    -age_rating
+    -rating
+    -rating_count
+    -genres
+    -keywords
+    -tags
+    -release_dates
+    -screenshots
+    -videos
+    -websites
+    -similar_games
+    -createdAt
+    -updatedAt
+    -alt_names
+    -status
+
+Member_Review:
+    -user
+    -game
+    -rating
+    -title
+    -body
+    -pros
+    -cons
+    -createdAt
+    -updatedAt
+
+CriticReview:
+    -Site
+    -Rating
+    -URL
