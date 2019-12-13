@@ -22,21 +22,37 @@ userRatingRouter.post("/", (req, res) => {
     })
 });
 
-// userRatingRouter.get('/', (req, res) => {
-//     userRatingModel.find({})
-//         .then(userRatingList => {
-//             res.json({
-//                 success: true,
-//                 data: gameList,
-//             });
-//         }).catch(error => {
-//             console.log(error);
-//             res.status(500).json({
-//                 success: false,
-//                 error,
-//             });
-//         });
-// });
+userRatingRouter.get('/', (req, res) => {
+    // userRatingModel.find({})
+    //     .then(userRatingList => {
+    //         res.json({
+    //             success: true,
+    //             data: gameList,
+    //         });
+    //     }).catch(error => {
+    //         console.log(error);
+    //         res.status(500).json({
+    //             success: false,
+    //             error,
+    //         });
+    //     });
+    userRatingModel.aggregate([
+        // { "$match": { game: { $in: game } } },
+        // { "$match": { game: mongoose.Types.ObjectId(ids) } },
+        {
+            "$group": {
+                "_id": "$game",
+                "avgRating": { "$avg": "$rating" }
+            }
+        },
+    ]).then(result => {
+        console.log(result);
+        res.json({
+            success: true,
+            result,
+        });
+    })
+});
 
 // // Get one
 // userRatingRouter.get('/:id', (req, res) => {
@@ -62,7 +78,10 @@ userRatingRouter.post("/", (req, res) => {
 userRatingRouter.get('/:gameid', (req, res) => {
     var avgScore = 0;
     userRatingModel.find({ game: req.params.gameid })
-        .populate("Game", {
+        .populate("game", {
+            _id: 0
+        })
+        .populate("user", {
             _id: 0
         })
         .then(userRating => {
@@ -78,7 +97,7 @@ userRatingRouter.get('/:gameid', (req, res) => {
                         "avgRating": { "$avg": "$rating" }
                     }
                 },
-            ]).then(result => { 
+            ]).then(result => {
                 console.log(result[0].avgRating);
                 avgScore = result[0].avgRating;
                 res.json({
@@ -86,7 +105,7 @@ userRatingRouter.get('/:gameid', (req, res) => {
                     data: userRating,
                     avgUserRating: avgScore
                 });
-            }).catch(err => {console.log(err)});
+            }).catch(err => { console.log(err) });
 
         }).catch(error => {
             console.log(error);
